@@ -17,22 +17,17 @@ const Users = () => {
         setVisible(true)
     }
 
-    useEffect(() => {
-        dispatch(getUsersRequest());
-    }, [dispatch])
+    useEffect(() => {dispatch(getUsersRequest());}, [dispatch])
+
     return (
         <div className="App">
             {loading && <p>Carregando...</p>}
             {!loading && users && users.length === 0 && <p>Não há usuários</p>}
             {users && users.length !== 0 && users.map(user => {
-                return <Card user={user} key={user.id} onClickPerform={() => handleClick(user)}/>
-
-            })}
+                return <Card user={user} key={user.id} onClickPerform={() => handleClick(user)}/>})}
             {error && !loading && <p>{error}</p>}
             {isVisible && <ModalComponent user={user} onChange={value => setVisible(value)}/>}
         </div>
-
-
     )
 }
 
