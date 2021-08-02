@@ -2,14 +2,11 @@ import React from 'react';
 
 const Card = (props) => {
 
-    console.log(props.user)
     return(
-        <div className="card">
-            <div>
-                <p>{props.user.nome}</p>
+        <div className="card" onClick={props.onClickPerform}>
+                <h6>{props.user.name}</h6>
                 <h6>{props.user.company.name}</h6>
-                <p>{props.user.company.bordao}</p>
-            </div>
+                <h6>{props.user.company.catchPhrase}</h6>
         </div>
     )
 }

@@ -1,29 +1,35 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import Card from "../components/CardComponent"
-import {getUsers} from "../redux/actions/users";
+import {getUsersRequest} from "../redux/actions/users";
+import ModalComponent from "./ModalComponent";
 
 const Users = () => {
     const dispatch = useDispatch();
     const users = useSelector(state => state.users.users)
-    const getUser = users.map(user => { return <Card user={user} key={user.id}/>})
+    const loading = useSelector(state => state.users.loading)
+    const error = useSelector(state => state.users.error)
+    const [isVisible, setVisible] = useState(false)
+    const [user, setUser] = useState(null)
+
+    const handleClick = (user) => {
+        setUser(user);
+        setVisible(true)
+    }
 
     useEffect(() => {
-        dispatch(getUsers([
-            {
-                id: 1,
-                nome: "Isaac",
-                company: {
-                    name: 'RAV',
-                    bordao: 'Soluções tecnológicas'
-                }
-            }
-        ]));
+        dispatch(getUsersRequest());
     }, [dispatch])
     return (
-        <div>
-            {users.length === 0 && <p>Não há usuários</p>}
-            {users.length != 0 && getUser}
+        <div className="App">
+            {loading && <p>Carregando...</p>}
+            {!loading && users && users.length === 0 && <p>Não há usuários</p>}
+            {users && users.length !== 0 && users.map(user => {
+                return <Card user={user} key={user.id} onClickPerform={() => handleClick(user)}/>
+
+            })}
+            {error && !loading && <p>{error}</p>}
+            {isVisible && <ModalComponent user={user} onChange={value => setVisible(value)}/>}
         </div>
 
 
